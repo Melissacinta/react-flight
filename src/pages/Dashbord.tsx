@@ -36,7 +36,6 @@ export default function Dashboard() {
     await getAllFlights(begin, end)
       .then(async (res) => {
         const data = await res.json();
-        console.log({ res: data, begin, end });
         // Flip flag to show that loading has finished.
         setIsLoading(false);
         // Gets all departing flight
@@ -103,7 +102,6 @@ export default function Dashboard() {
         );
         setPage(0);
         setflightData(Object.values(mergedArr));
-        console.log({ res2: Object.values(mergedArr) });
 
         notify('Airport records pulled successfully', { type: 'success' });
       })
