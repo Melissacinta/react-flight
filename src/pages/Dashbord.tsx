@@ -17,6 +17,7 @@ export interface Flight {
 const maxDate = new Date().toISOString().split('Z')[0];
 export default function Dashboard() {
   const [isLoading, setIsLoading] = useState(false);
+  const [reload, setReload] = useState(false);
   const [page, setPage] = useState(0);
   const [startDate, setStartDate] = useState('');
   const [begin, setBegin] = useState(Math.floor(Date.now() / 1000) - 7200);
@@ -25,15 +26,19 @@ export default function Dashboard() {
   const { getAllFlights } = useFlights();
 
   useEffect(() => {
-    getFlights();
-  }, []);
+    if (!flightData || reload) {
+      getFlights();
+    }
+  }, [reload, flightData]);
 
   const getFlights = async () => {
     setIsLoading(true);
     await getAllFlights(begin, end)
       .then(async (res) => {
         const data = await res.json();
+        console.log({ res: data, begin, end });
         // Flip flag to show that loading has finished.
+        setIsLoading(false);
         // Gets all departing flight
         const depAirports = data.reduce((acc: Flight[], flight: any) => {
           if (flight.estDepartureAirport) {
@@ -98,16 +103,20 @@ export default function Dashboard() {
         );
         setPage(0);
         setflightData(Object.values(mergedArr));
+        console.log({ res2: Object.values(mergedArr) });
+
         notify('Airport records pulled successfully', { type: 'success' });
       })
-      .catch(() =>
+      .catch((err) => {
+        console.log(err);
         notify(
           'No Airport record found for your request please choose try a different start time',
           { type: 'error' }
-        )
-      )
+        );
+      })
       .finally(() => {
         setIsLoading(false);
+        setReload(false);
       });
   };
 
@@ -116,7 +125,7 @@ export default function Dashboard() {
       const new_start = Math.floor(new Date(startDate).getTime() / 1000);
       setBegin(new_start);
       setEnd(new_start + 7200);
-      getFlights();
+      setReload(true);
     }
   };
   const handlePageChange = (str: string) => {
@@ -166,6 +175,7 @@ export default function Dashboard() {
                     <FlightsTable
                       data={flightData ?? []}
                       page={page}
+                      length={flightData?.length || 0}
                       handlePageChange={handlePageChange}
                     />
                   </>

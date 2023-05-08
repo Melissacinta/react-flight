@@ -1,15 +1,17 @@
 import Pagination from './Pagination';
 import { Flight } from '../pages/Dashbord';
+
 type Props = {
   data: Flight[];
   page: number;
+  length: number;
   handlePageChange: (x: string) => void;
 };
-const FlightsTable = ({ data, page, handlePageChange }: Props) => {
+const FlightsTable = ({ data, page, length, handlePageChange }: Props) => {
   const start = page * 10 + 1;
   const end =
-    page + 1 === Math.ceil(data.length / 10)
-      ? page * 10 + (data.length % 10)
+    page + 1 === Math.ceil(length / 10)
+      ? page * 10 + (length % 10)
       : page * 10 + 10;
   return (
     <div className="inline-block min-w-full py-2 align-middle">
@@ -46,8 +48,8 @@ const FlightsTable = ({ data, page, handlePageChange }: Props) => {
           <tbody className="divide-y divide-gray-200 bg-white font-serif">
             {data
               ?.sort((x, y) => x.time - y.time)
-              .slice(start - 1, end)
-              .map((flight: Flight, id: number) => (
+              ?.slice(start - 1, end)
+              ?.map((flight: Flight, id: number) => (
                 <tr
                   key={id}
                   className={id % 2 === 0 ? undefined : 'bg-gray-50'}
