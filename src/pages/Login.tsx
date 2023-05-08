@@ -1,6 +1,7 @@
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { notify } from '../components/Alert';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -12,7 +13,11 @@ export default function Login() {
   const submit = (e: any) => {
     e.preventDefault();
     if (formDetails.username === 'admin' && formDetails.password === 'admin') {
+      localStorage.setItem('token', 'admin');
+      notify('login successfully!', { type: 'success' });
       navigate('/dashboard');
+    } else {
+      notify('Invalid credentials!', { type: 'error' });
     }
   };
   return (
@@ -135,12 +140,6 @@ export default function Login() {
                 </form>
               </div>
             </div>
-          </div>
-          <div className="pt-4">
-            <small className="text-xs font-mono text-red-500">
-              Hint: please use <strong>admin</strong> for the username and
-              password
-            </small>
           </div>
         </div>
         <div className="relative hidden w-0 flex-1 lg:block">

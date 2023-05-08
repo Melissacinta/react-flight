@@ -2,6 +2,7 @@ import { Fragment, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
+import { notify } from './Alert';
 
 export default function SignOutModal({
   open,
@@ -13,6 +14,8 @@ export default function SignOutModal({
   const navigate = useNavigate();
   const cancelButtonRef = useRef(null);
   const handleSignout = () => {
+    localStorage.removeItem('token');
+    notify('logged out successfully!', { type: 'success' });
     navigate('/');
   };
   return (
