@@ -1,8 +1,10 @@
 # ReactFlight
 
-> Template for React JS projects + Vite
+> React JS project project created with Vite
 
 ## Try it
+
+Use **admin** for username and password
 
 ### Clone to local
 
