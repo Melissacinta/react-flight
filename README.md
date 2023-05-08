@@ -4,6 +4,8 @@
 
 ## Try it
 
+Vist [React Flights](https://react-flights.netlify.app/) to view demo
+
 Use **admin** for username and password
 
 ### Clone to local
